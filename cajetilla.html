@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cajetilla Nocturna // Para Xiaro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #08080b;
+            color: #d1d1d6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+            font-family: 'Special Elite', monospace;
+            position: relative;
+        }
+
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            z-index: 999;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 1.1rem;
+            color: #ff2233;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        p.subtitle {
+            font-size: 0.72rem;
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        .marlboro-pack {
+            background: #111116;
+            border: 2px solid #281216;
+            border-radius: 6px;
+            padding: 0;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.95), 0 0 20px rgba(255, 34, 51, 0.15);
+            overflow: hidden;
+        }
+
+        .marlboro-header {
+            background: linear-gradient(135deg, #cc1122 0%, #880011 100%);
+            padding: 15px 10px;
+            border-bottom: 3px solid #ff2233;
+            position: relative;
+        }
+
+        .marlboro-header::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 12px solid #ff2233;
+        }
+
+        .marlboro-header-title {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            font-weight: bold;
+        }
+
+        .marlboro-body {
+            padding: 30px 20px 20px 20px;
+        }
+
+        .marlboro-brand {
+            font-size: 1.8rem;
+            color: #e6e6ef;
+            letter-spacing: 7px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .marlboro-brand span {
+            color: #ff2233;
+        }
+
+        .cigarettes-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            background: #08080c;
+            padding: 20px 10px;
+            border: 1px solid #1f1f28;
+            border-radius: 4px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+        }
+
+        .cigarette-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cigarette-item:hover {
+            transform: translateY(-12px);
+        }
+
+        .cigarette-body {
+            width: 24px;
+            height: 140px;
+            background: linear-gradient(90deg, #e6e6e6 0%, #ffffff 50%, #cccccc 100%);
+            border-radius: 3px 3px 0 0;
+            position: relative;
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cigarette-filter {
+            width: 100%;
+            height: 42px;
+            background: linear-gradient(90deg, #b36423 0%, #d98236 50%, #944e15 100%);
+            border-radius: 0 0 3px 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #fff;
+            font-weight: bold;
+            border-top: 1px solid #6b3306;
+        }
+
+        .cigarette-glow {
+            width: 100%;
+            height: 6px;
+            background: #ff2200;
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 -2px 8px #ff3300, 0 0 12px #ff0000;
+            animation: brasa-pulse 1.5s infinite alternate;
+        }
+
+        @keyframes brasa-pulse {
+            0% { opacity: 0.6; filter: brightness(0.9); }
+            100% { opacity: 1; filter: brightness(1.3); }
+        }
+
+        .warning-label {
+            margin-top: 20px;
+            border: 1px solid #ff2233;
+            background: #18080c;
+            padding: 10px;
+            font-size: 0.62rem;
+            color: #ff6677;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
+        #reading-screen {
+            display: none;
+            background: #111116;
+            border: 2px solid #ff2233;
+            padding: 25px;
+            border-radius: 6px;
+            text-align: left;
+            box-shadow: 0 0 30px rgba(255, 34, 51, 0.25);
+            position: relative;
+        }
+
+        .tag-cigar {
+            font-size: 0.72rem;
+            color: #ff2233;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #reading-screen img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin: 15px 0;
+            filter: contrast(105%) grayscale(15%);
+            border: 1px solid #222;
+        }
+
+        .reading-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e0e0e6;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: #1a080c;
+            border: 1px solid #ff2233;
+            color: #ff2233;
+            padding: 10px 16px;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .back-btn:hover {
+            background: #ff2233;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255,34,51,0.5);
+        }
+
+        .audio-bar {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: #0a0a0d;
+            border-top: 1px solid #ff2233;
+            padding: 10px 20px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #smoke-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 998;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="smoke-canvas"></canvas>
+    <audio id="cigar-audio"></audio>
+
+    <div class="container">
+        <h1>CAJETILLA NOCTURNA</h1>
+        <p class="subtitle">SELECCIONA UN CIGARRILLO PARA ENCENDER EL PENSAMIENTO</p>
+
+        <div class="marlboro-pack" id="cajetilla-box">
+            <div class="marlboro-header">
+                <div class="marlboro-header-title">EDICIÓN ESPECIAL // 03:00 AM</div>
+            </div>
+
+            <div class="marlboro-body">
+                <div class="marlboro-brand">MALB<span>ORO</span></div>
+
+                <div class="cigarettes-container">
+                    <div class="cigarette-item" onclick="fumarCigarrillo(1)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">01</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(2)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">02</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(3)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">03</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(4)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">04</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(5)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">05</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(6)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">06</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(7)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">07</div>
+                    </div>
+                    <div class="cigarette-item" onclick="fumarCigarrillo(8)">
+                        <div class="cigarette-body"><div class="cigarette-glow"></div></div>
+                        <div class="cigarette-filter">08</div>
+                    </div>
+                </div>
+
+                <div class="warning-label">
+                    ADVERTENCIA: EL AMOR A DISTANCIA Y LAS DESVELADAS PRODUCEN PENSAMIENTOS INEVITABLES HACIA TI.
+                </div>
+            </div>
+        </div>
+
+        <div id="reading-screen">
+            <span class="tag-cigar" id="cigar-title"></span>
+            <img id="cigar-img" src="" alt="Imagen de recuerdo">
+            <p class="reading-text" id="cigar-text"></p>
+            <button class="back-btn" onclick="guardarCigarro()">[ ◀ GUARDAR Y REGRESAR A LA CAJETILLA ]</button>
+        </div>
+    </div>
+
+    <div class="audio-bar" id="audio-bar">
+        <span style="font-size: 0.8rem; color: #ff2233;" id="audio-title">♪ REPRODUCIENDO CINTA NOCTURNA...</span>
+        <button class="back-btn" onclick="pararAudio()" style="width:auto; padding: 5px 12px;">PAUSAR</button>
+    </div>
+
+    <script>
+        var cancionUniversal = "cancion1.mp3";
+
+        var cigarrillos = {
+            1: {
+                titulo: "CIGARRILLO #01 // LA PRIMERA LUZ",
+                texto: "Entre el humo y la madrugada, cada bocanada es un intento de hacer llegar mi calor hasta donde estás.",
+                img: "foto1.jpeg",
+                audio: cancionUniversal
+            },
+            2: {
+                titulo: "CIGARRILLO #02 // SOMBRAS COMPARTIDAS",
+                texto: "No hay distancia que apague lo que siento cuando me miras a través de una pantalla.",
+                img: "foto2.jpeg",
+                audio: cancionUniversal
+            },
+            3: {
+                titulo: "CIGARRILLO #03 // CENIZAS EN LA DISTANCIA",
+                texto: "El tiempo pasa lento, pero la certeza de encontrarte nos mantiene intactos.",
+                img: "foto3.jpeg",
+                audio: cancionUniversal
+            },
+            4: {
+                titulo: "CIGARRILLO #04 // EL RUIDO BLANCO",
+                texto: "A las tres de la mañana las ideas se vuelven extrañas, y mi único pensamiento constante eres tú.",
+                img: "foto4.jpeg",
+                audio: cancionUniversal
+            },
+            5: {
+                titulo: "CIGARRILLO #05 // FUEGO LENTO",
+                texto: "Guardo cada palabra tuya como si fuera lumbre en medio del frío.",
+                img: "flor1.png",
+                audio: cancionUniversal
+            },
+            6: {
+                titulo: "CIGARRILLO #06 // LA ULTIMA CALADA",
+                texto: "Aunque se consuma el cigarro, las ganas de abrazarte se quedan flotando en el cuarto.",
+                img: "flor2.jpg",
+                audio: cancionUniversal
+            },
+            7: {
+                titulo: "CIGARRILLO #07 // BITACORA DE MADRUGADA",
+                texto: "Tus dibujos, tus mensajes, tu risa... todo forma parte de este refugio que construí para ti.",
+                img: "bala1.jpeg",
+                audio: cancionUniversal
+            },
+            8: {
+                titulo: "CIGARRILLO #08 // HASTA EL FINAL",
+                texto: "Si tengo que esperarte mil noches más, lo haré con un cigarro en la mano y tu nombre en la mente.",
+                img: "bala2.jpeg",
+                audio: cancionUniversal
+            }
+        };
+
+        function fumarCigarrillo(num) {
+            var data = cigarrillos[num];
+            document.getElementById("cajetilla-box").style.display = "none";
+            document.getElementById("cigar-title").innerText = data.titulo;
+            document.getElementById("cigar-text").innerText = data.texto;
+            document.getElementById("cigar-img").src = data.img;
+            document.getElementById("reading-screen").style.display = "block";
+
+            var player = document.getElementById("cigar-audio");
+            var audioBar = document.getElementById("audio-bar");
+            if(data.audio && data.audio !== "") {
+                player.src = data.audio;
+                player.play().catch(function(e){console.log("Audio en espera");});
+                audioBar.style.display = "flex";
+            } else {
+                player.pause();
+                audioBar.style.display = "none";
+            }
+
+            lanzarEfectoHumo();
+        }
+
+        function guardarCigarro() {
+            document.getElementById("reading-screen").style.display = "none";
+            document.getElementById("cajetilla-box").style.display = "block";
+            pararAudio();
+        }
+
+        function pararAudio() {
+            var player = document.getElementById("cigar-audio");
+            player.pause();
+            document.getElementById("audio-bar").style.display = "none";
+        }
+
+        const canvas = document.getElementById("smoke-canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particulasHumo = [];
+
+        function lanzarEfectoHumo() {
+            for(let i=0; i<18; i++) {
+                particulasHumo.push({
+                    x: window.innerWidth / 2 + (Math.random() * 80 - 40),
+                    y: window.innerHeight / 2 + 80,
+                    size: Math.random() * 12 + 6,
+                    speedY: Math.random() * -2 - 1,
+                    speedX: Math.random() * 2 - 1,
+                    alpha: Math.random() * 0.5 + 0.25
+                });
+            }
+        }
+
+        function animarHumo() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for(let i = 0; i < particulasHumo.length; i++) {
+                let p = particulasHumo[i];
+                ctx.fillStyle = `rgba(200, 200, 200, ${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.size += 0.25;
+                p.alpha -= 0.008;
+                if(p.alpha <= 0) {
+                    particulasHumo.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animarHumo);
+        }
+        animarHumo();
+    </script>
+</body>
+</html>
